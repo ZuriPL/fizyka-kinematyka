@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Symulacja</title>
+		<script src="index.js" defer></script>
+	</head>
+	<body>
+		<canvas id="canvas"></canvas>
+		<div class="controls">
+			<h1>Ustawienia</h1>
+			<label id="time-label">
+				Mnożnik czasu:
+				<input type="range" id="time-input" value="10" min="1" max="20" />
+				<span>10</span>
+			</label>
+			<label id="height-label">
+				Wysokość trampoliny:
+				<input type="range" id="height-input" value="200" min="100" max="500" />
+				<span>1</span>
+			</label>
+		</div>
+
+		<script>
+			;(function () {
+				const canvas = document.getElementById('canvas'),
+					context = canvas.getContext('2d')
+
+				// resize the canvas to fill browser window dynamically
+				window.addEventListener('resize', resizeCanvas, false)
+
+				function resizeCanvas() {
+					canvas.width = window.innerWidth
+					canvas.height = window.innerHeight
+				}
+				resizeCanvas()
+			})()
+		</script>
+		<style>
+			body {
+				margin: 0;
+				overflow: hidden;
+			}
+			.controls {
+				position: fixed;
+				top: 0.75rem;
+				right: 0.75rem;
+				padding: 0.5rem 1.5rem;
+				background-color: aliceblue;
+				border: 1px solid black;
+			}
+			label {
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+			label > input {
+				flex: 1;
+			}
+			h1 {
+				display: grid;
+				place-items: center;
+				margin: 0;
+				margin-bottom: 0.5rem;
+			}
+		</style>
+	</body>
+</html>
