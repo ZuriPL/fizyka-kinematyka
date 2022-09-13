@@ -8,25 +8,25 @@ const timeText = document.querySelector('#time-label > span')
 const timeMultiplierInput = document.querySelector('#time-input')
 
 timeMultiplierInput.addEventListener('input', () => {
-	timeText.textContent = timeMultiplierInput.value
+	timeText.textContent = Number.parseFloat(+timeMultiplierInput.value).toFixed(1)
 })
-timeText.textContent = timeMultiplierInput.value
+timeText.textContent = Number.parseFloat(+timeMultiplierInput.value).toFixed(1)
 
 const heightText = document.querySelector('#height-label > span')
 const heightInput = document.querySelector('#height-input')
 
 heightInput.addEventListener('input', () => {
-	heightText.textContent = +heightInput.value / 100
+	heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2)
 })
-heightText.textContent = +heightInput.value / 100
+heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2)
 
 const ballText = document.querySelector('#ball-label > span')
 const ballInput = document.querySelector('#ball-input')
 
 ballInput.addEventListener('input', () => {
-	ballText.textContent = ballInput.value
+	ballText.textContent = Number.parseFloat(ballInput.value).toFixed(1)
 })
-ballText.textContent = ballInput.value
+ballText.textContent = Number.parseFloat(ballInput.value).toFixed(1)
 
 const startButton = document.querySelector('#start-stop')
 
@@ -42,6 +42,14 @@ function move(dt) {
 	y -= v * dt
 }
 
+function max(a, b) {
+	if (+a < +b) return b
+
+	return a
+}
+
+ctx.fillStyle = '#ff1111'
+
 function animate(x) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -50,14 +58,26 @@ function animate(x) {
 	ctx.closePath()
 	ctx.fill()
 
+	ctx.strokeStyle = 'gray'
+
 	ctx.beginPath()
-	ctx.rect(canvas.width / 4 - 50, canvas.height - heightInput.value, 100, heightInput.value)
+	ctx.rect(canvas.width / 4 - 75, canvas.height - heightInput.value, 150, heightInput.value)
+	ctx.stroke()
+
+	ctx.strokeStyle = '#000000'
+
+	ctx.beginPath()
+	ctx.moveTo(canvas.width / 4 - 75, canvas.height - heightInput.value)
+	ctx.lineTo(canvas.width / 4 + 1, max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.moveTo(canvas.width / 4, max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.lineTo(canvas.width / 4 + 75, canvas.height - heightInput.value)
 	ctx.stroke()
 
 	if (isRunning) {
 		move(((x - lastT) / 1000) * timeMultiplierInput.value)
 	} else {
 		y = +ballInput.value
+		v = 0
 	}
 
 	lastT = x
