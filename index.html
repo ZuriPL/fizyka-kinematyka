@@ -32,15 +32,15 @@
 				<span></span>
 			</p>
 			<p id="vel-label">
-				Velocity:
+				Prędkość:
 				<span></span>
 			</p>
 		</div>
 
 		<script>
 			;(function () {
-				const canvas = document.getElementById('canvas'),
-					context = canvas.getContext('2d')
+				const canvas = document.getElementById('canvas')
+				const context = canvas.getContext('2d')
 
 				// resize the canvas to fill browser window dynamically
 				window.addEventListener('resize', resizeCanvas, false)
@@ -49,6 +49,7 @@
 					canvas.width = window.innerWidth
 					canvas.height = window.innerHeight
 				}
+
 				resizeCanvas()
 			})()
 		</script>
