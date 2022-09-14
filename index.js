@@ -1,8 +1,9 @@
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 
+const controls = document.querySelector('fieldset')
 const vText = document.querySelector('#vel-label > span')
-const yText = document.querySelector('#y-label > span')
+const aText = document.querySelector('#a-label > span')
 
 const timeText = document.querySelector('#time-label > span')
 const timeMultiplierInput = document.querySelector('#time-input')
@@ -16,36 +17,78 @@ const heightText = document.querySelector('#height-label > span')
 const heightInput = document.querySelector('#height-input')
 
 heightInput.addEventListener('input', () => {
-	heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2)
+	heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2) + ' m'
 })
-heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2)
+heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2) + ' m'
 
 const ballText = document.querySelector('#ball-label > span')
 const ballInput = document.querySelector('#ball-input')
 
 ballInput.addEventListener('input', () => {
-	ballText.textContent = Number.parseFloat(ballInput.value).toFixed(1)
+	ballText.textContent = Number.parseFloat(ballInput.value).toFixed(2) + ' m'
 })
-ballText.textContent = Number.parseFloat(ballInput.value).toFixed(1)
+ballText.textContent = Number.parseFloat(ballInput.value).toFixed(2) + ' m'
+
+const massText = document.querySelector('#mass-label > span')
+const massInput = document.querySelector('#mass-input')
+
+massInput.addEventListener('input', () => {
+	massText.textContent = Number.parseFloat(massInput.value).toFixed(3) + ' kg'
+})
+massText.textContent = Number.parseFloat(massInput.value).toFixed(3) + ' kg'
+
+const trampKText = document.querySelector('#tramp-k-label > span')
+const trampKInput = document.querySelector('#tramp-k-input')
+
+trampKInput.addEventListener('input', () => {
+	trampKText.textContent = trampKInput.value + ' N/m'
+})
+trampKText.textContent = trampKInput.value + ' N/m'
 
 const startButton = document.querySelector('#start-stop')
+const stepButton = document.querySelector('#next-step')
+const resetButton = document.querySelector('#reset')
+
+stepButton.addEventListener('click', () => {
+	if (isRunning) return
+	controls.setAttribute('disabled', '')
+	move(1 / 60)
+})
+
+resetButton.addEventListener('click', clear)
+
+function stop() {
+	isRunning = false
+	startButton.textContent = 'Start'
+}
+
+function clear() {
+	stop()
+
+	controls.removeAttribute('disabled', '')
+	y = +ballInput.value
+	v = 0
+	a = 9.81
+}
 
 let y = +ballInput.value
 let v = 0
-let lastT = 0
+let a = 9.81
 
-let startTime
+let lastT = 0
 let isRunning = false
 
 function move(dt) {
-	v += 9.81 * dt
+	a = 9.81 - (+trampKInput.value * Math.max(0, +heightInput.value / 100 - y)) / +massInput.value
+
+	v += a * dt
 	y -= v * dt
 }
 
-ctx.fillStyle = '#ff1111'
-ctx.lineWidth = 2
-
 function animate(x) {
+	ctx.lineWidth = 2
+	ctx.fillStyle = '#ff1111'
+
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 	ctx.strokeStyle = 'gray'
@@ -59,10 +102,10 @@ function animate(x) {
 	// eww
 	ctx.beginPath()
 	ctx.moveTo(canvas.width / 4 - 75, canvas.height - heightInput.value)
-	ctx.lineTo(canvas.width / 4 - 9, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.moveTo(canvas.width / 4 - 10, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.lineTo(canvas.width / 4 + 11, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.moveTo(canvas.width / 4 + 10, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.lineTo(canvas.width / 4 - 15, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.moveTo(canvas.width / 4 - 16, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.lineTo(canvas.width / 4 + 17, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.moveTo(canvas.width / 4 + 16, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
 	ctx.lineTo(canvas.width / 4 + 75, canvas.height - heightInput.value)
 	ctx.stroke()
 
@@ -73,39 +116,25 @@ function animate(x) {
 
 	if (isRunning) {
 		move(((x - lastT) / 1000) * timeMultiplierInput.value)
-	} else {
-		y = +ballInput.value
-		v = 0
 	}
 
 	lastT = x
 
-	if (y < 0) {
-		console.log(`Czas: ${(Date.now() - startTime) / 1000} s`)
-		console.log(`Prędkość: ${v} m/s`)
-		console.log(`Y: ${y}`)
+	if (y < 0) clear()
 
-		isRunning = false
-		startButton.textContent = 'Start'
-
-		y = +ballInput.value
-		v = 0
-	}
-
-	vText.textContent = v
-	yText.textContent = y
+	vText.textContent = v + ' m/s'
+	aText.textContent = a + ' m/s^2'
 
 	window.requestAnimationFrame(animate)
 }
 
 function toggle() {
 	if (isRunning) {
-		isRunning = false
-		startButton.textContent = 'Start'
+		stop()
 	} else {
 		isRunning = true
-		startTime = Date.now()
 		startButton.textContent = 'Stop'
+		controls.setAttribute('disabled', '')
 	}
 }
 
