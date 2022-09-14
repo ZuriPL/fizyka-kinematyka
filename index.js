@@ -21,11 +21,20 @@ heightInput.addEventListener('input', () => {
 })
 heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2) + ' m'
 
+const gravityText = document.querySelector('#gravity-label > span')
+const gravityInput = document.querySelector('#gravity-input')
+
+gravityInput.addEventListener('input', () => {
+	gravityText.textContent = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s^2'
+})
+gravityText.textContent = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s^2'
+
 const ballText = document.querySelector('#ball-label > span')
 const ballInput = document.querySelector('#ball-input')
 
 ballInput.addEventListener('input', () => {
 	ballText.textContent = Number.parseFloat(ballInput.value).toFixed(2) + ' m'
+	y = +ballInput.value
 })
 ballText.textContent = Number.parseFloat(ballInput.value).toFixed(2) + ' m'
 
@@ -57,35 +66,35 @@ stepButton.addEventListener('click', () => {
 
 resetButton.addEventListener('click', clear)
 
-function stop() {
+function stopSim() {
 	isRunning = false
 	startButton.textContent = 'Start'
 }
 
-function clear() {
-	stop()
+function clear(x) {
+	stopSim()
 
 	controls.removeAttribute('disabled', '')
 	y = +ballInput.value
 	v = 0
-	a = 9.81
+	a = +gravityInput.value
 }
 
 let y = +ballInput.value
 let v = 0
-let a = 9.81
+let a = +gravityInput.value
 
 let lastT = 0
 let isRunning = false
 
 function move(dt) {
-	a = 9.81 - (+trampKInput.value * Math.max(0, +heightInput.value / 100 - y)) / +massInput.value
-
 	v += a * dt
 	y -= v * dt
 }
 
 function animate(x) {
+	a = +gravityInput.value - (+trampKInput.value * Math.max(0, +heightInput.value / 100 - y)) / +massInput.value
+
 	ctx.lineWidth = 2
 	ctx.fillStyle = '#ff1111'
 
@@ -99,28 +108,47 @@ function animate(x) {
 
 	ctx.strokeStyle = '#000000'
 
-	// eww
+	let ballRadius = 15 + +massInput.value * 3
+
 	ctx.beginPath()
 	ctx.moveTo(canvas.width / 4 - 75, canvas.height - heightInput.value)
-	ctx.lineTo(canvas.width / 4 - 15, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.moveTo(canvas.width / 4 - 16, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.lineTo(canvas.width / 4 + 17, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
-	ctx.moveTo(canvas.width / 4 + 16, Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + 16))
+	ctx.lineTo(
+		canvas.width / 4 - ballRadius + 1,
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+	)
+	ctx.moveTo(
+		canvas.width / 4 - ballRadius,
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+	)
+	ctx.lineTo(
+		canvas.width / 4 + ballRadius + 1,
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+	)
+	ctx.moveTo(
+		canvas.width / 4 + ballRadius,
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+	)
 	ctx.lineTo(canvas.width / 4 + 75, canvas.height - heightInput.value)
 	ctx.stroke()
 
 	ctx.beginPath()
-	ctx.arc(canvas.width / 4, canvas.height - y * 100, 16, Math.PI * 2, 0, false)
+	ctx.arc(canvas.width / 4, canvas.height - y * 100, ballRadius, Math.PI * 2, 0, false)
 	ctx.closePath()
 	ctx.fill()
 
 	if (isRunning) {
 		move(((x - lastT) / 1000) * timeMultiplierInput.value)
+	} else {
+		stopSim()
 	}
 
 	lastT = x
 
-	if (y < 0) clear()
+	if (y < 0) {
+		y = 0
+		v = 0
+		console.log('Dotknięto podłogi')
+	}
 
 	vText.textContent = v + ' m/s'
 	aText.textContent = a + ' m/s^2'
@@ -130,7 +158,7 @@ function animate(x) {
 
 function toggle() {
 	if (isRunning) {
-		stop()
+		stopSim()
 	} else {
 		isRunning = true
 		startButton.textContent = 'Stop'
