@@ -80,6 +80,14 @@ function clear(x) {
 	a = +gravityInput.value
 }
 
+document.addEventListener('keypress', (e) => {
+	if (e.key === 'p') {
+		if (controls.hasAttribute('disabled')) return controls.removeAttribute('disabled', '')
+
+		controls.setAttribute('disabled', '')
+	}
+})
+
 let y = +ballInput.value
 let v = 0
 let a = +gravityInput.value
