@@ -122,19 +122,19 @@ function animate(x) {
 	ctx.moveTo(canvas.width / 4 - 75, canvas.height - heightInput.value)
 	ctx.lineTo(
 		canvas.width / 4 - ballRadius + 1,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100)
 	)
 	ctx.moveTo(
 		canvas.width / 4 - ballRadius,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100)
 	)
 	ctx.lineTo(
 		canvas.width / 4 + ballRadius + 1,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100)
 	)
 	ctx.moveTo(
 		canvas.width / 4 + ballRadius,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - heightInput.value, canvas.height - y * 100)
 	)
 	ctx.lineTo(canvas.width / 4 + 75, canvas.height - heightInput.value)
 	ctx.stroke()
@@ -152,7 +152,7 @@ function animate(x) {
 
 	lastT = x
 
-	if (y < 0) {
+	if (y <= 0) {
 		y = 0
 		v = 0
 		console.log('Dotknięto podłogi')
