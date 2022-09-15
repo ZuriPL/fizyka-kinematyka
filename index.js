@@ -140,7 +140,7 @@ function animate(x) {
 	ctx.stroke()
 
 	ctx.beginPath()
-	ctx.arc(canvas.width / 4, canvas.height - y * 100, ballRadius, Math.PI * 2, 0, false)
+	ctx.arc(canvas.width / 4, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
 	ctx.closePath()
 	ctx.fill()
 
