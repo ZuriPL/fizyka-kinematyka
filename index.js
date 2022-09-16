@@ -106,13 +106,20 @@ function animate(x) {
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+	let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+	gradient.addColorStop(0.1, '#02ace4')
+	gradient.addColorStop(1, '#cfecfc')
+
+	ctx.fillStyle = gradient
+	ctx.fillRect(0, 0, canvas.width, canvas.height)
+
 	if (gridInput.checked) {
 		ctx.lineWidth = 1
-		ctx.strokeStyle = '#bbb'
+		ctx.strokeStyle = '#9a9a9a'
 
 		for (let x = 0; x <= canvas.width; x += 100) {
-			ctx.moveTo(canvas.height - x - 0.5, 0)
-			ctx.lineTo(canvas.height - x - 0.5, canvas.height)
+			ctx.moveTo(x - 0.5, 0)
+			ctx.lineTo(x - 0.5, canvas.height)
 		}
 
 		for (let x = 0; x <= canvas.height; x += 100) {
@@ -122,12 +129,17 @@ function animate(x) {
 		ctx.stroke()
 	}
 
+	ctx.beginPath()
+	ctx.fillStyle = '#1bb21b'
+	ctx.fillRect(0, canvas.height, canvas.width, -5)
+	ctx.stroke()
+
 	ctx.lineWidth = 2
 	ctx.fillStyle = '#ff1111'
 	ctx.strokeStyle = 'gray'
 
 	ctx.beginPath()
-	ctx.rect(canvas.width / 4 - 75, canvas.height - +heightInput.value * 100, 150, +heightInput.value * 100)
+	ctx.rect(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100, 150, +heightInput.value * 100)
 	ctx.stroke()
 
 	ctx.strokeStyle = '#000000'
@@ -135,28 +147,28 @@ function animate(x) {
 	let ballRadius = 15 + +massInput.value * 3
 
 	ctx.beginPath()
-	ctx.moveTo(canvas.width / 4 - 75, canvas.height - +heightInput.value * 100)
+	ctx.moveTo(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100)
 	ctx.lineTo(
-		canvas.width / 4 - ballRadius + 1,
+		canvas.width / 3 - ballRadius + 1,
 		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.moveTo(
-		canvas.width / 4 - ballRadius,
+		canvas.width / 3 - ballRadius,
 		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.lineTo(
-		canvas.width / 4 + ballRadius + 1,
+		canvas.width / 3 + ballRadius + 1,
 		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.moveTo(
-		canvas.width / 4 + ballRadius,
+		canvas.width / 3 + ballRadius,
 		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
-	ctx.lineTo(canvas.width / 4 + 75, canvas.height - +heightInput.value * 100)
+	ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
 	ctx.stroke()
 
 	ctx.beginPath()
-	ctx.arc(canvas.width / 4, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
+	ctx.arc(canvas.width / 3, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
 	ctx.closePath()
 	ctx.fill()
 
