@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d')
 const controls = document.querySelector('fieldset')
 const vText = document.querySelector('#vel-label > span')
 const aText = document.querySelector('#a-label > span')
+const gridInput = document.querySelector('#grid-check')
 
 const timeText = document.querySelector('#time-label > span')
 const timeMultiplierInput = document.querySelector('#time-input')
@@ -17,9 +18,9 @@ const heightText = document.querySelector('#height-label > span')
 const heightInput = document.querySelector('#height-input')
 
 heightInput.addEventListener('input', () => {
-	heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2) + ' m'
+	heightText.textContent = Number.parseFloat(+heightInput.value).toFixed(2) + ' m'
 })
-heightText.textContent = Number.parseFloat(+heightInput.value / 100).toFixed(2) + ' m'
+heightText.textContent = Number.parseFloat(+heightInput.value).toFixed(2) + ' m'
 
 const gravityText = document.querySelector('#gravity-label > span')
 const gravityInput = document.querySelector('#gravity-input')
@@ -101,17 +102,32 @@ function move(dt) {
 }
 
 function animate(x) {
-	a = +gravityInput.value - (+trampKInput.value * Math.max(0, +heightInput.value / 100 - y)) / +massInput.value
-
-	ctx.lineWidth = 2
-	ctx.fillStyle = '#ff1111'
+	a = +gravityInput.value - (+trampKInput.value * Math.max(0, +heightInput.value - y)) / +massInput.value
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+	if (gridInput.checked) {
+		ctx.lineWidth = 1
+		ctx.strokeStyle = '#bbb'
+
+		for (let x = 0; x <= canvas.width; x += 100) {
+			ctx.moveTo(canvas.height - x - 0.5, 0)
+			ctx.lineTo(canvas.height - x - 0.5, canvas.height)
+		}
+
+		for (let x = 0; x <= canvas.height; x += 100) {
+			ctx.moveTo(0, canvas.height - x - 0.5)
+			ctx.lineTo(canvas.width, canvas.height - x - 0.5)
+		}
+		ctx.stroke()
+	}
+
+	ctx.lineWidth = 2
+	ctx.fillStyle = '#ff1111'
 	ctx.strokeStyle = 'gray'
 
 	ctx.beginPath()
-	ctx.rect(canvas.width / 4 - 75, canvas.height - heightInput.value, 150, heightInput.value)
+	ctx.rect(canvas.width / 4 - 75, canvas.height - +heightInput.value * 100, 150, +heightInput.value * 100)
 	ctx.stroke()
 
 	ctx.strokeStyle = '#000000'
@@ -119,28 +135,28 @@ function animate(x) {
 	let ballRadius = 15 + +massInput.value * 3
 
 	ctx.beginPath()
-	ctx.moveTo(canvas.width / 4 - 75, canvas.height - heightInput.value)
+	ctx.moveTo(canvas.width / 4 - 75, canvas.height - +heightInput.value * 100)
 	ctx.lineTo(
 		canvas.width / 4 - ballRadius + 1,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.moveTo(
 		canvas.width / 4 - ballRadius,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.lineTo(
 		canvas.width / 4 + ballRadius + 1,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
 	ctx.moveTo(
 		canvas.width / 4 + ballRadius,
-		Math.max(canvas.height - heightInput.value, canvas.height - y * 100 + ballRadius)
+		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
 	)
-	ctx.lineTo(canvas.width / 4 + 75, canvas.height - heightInput.value)
+	ctx.lineTo(canvas.width / 4 + 75, canvas.height - +heightInput.value * 100)
 	ctx.stroke()
 
 	ctx.beginPath()
-	ctx.arc(canvas.width / 4, canvas.height - y * 100, ballRadius, Math.PI * 2, 0, false)
+	ctx.arc(canvas.width / 4, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
 	ctx.closePath()
 	ctx.fill()
 
