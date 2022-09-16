@@ -168,7 +168,7 @@ function animate(x) {
 
 	lastT = x
 
-	if (y < 0) {
+	if (y <= 0) {
 		y = 0
 		v = 0
 		console.log('Dotknięto podłogi')
