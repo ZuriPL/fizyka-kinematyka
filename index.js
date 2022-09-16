@@ -107,7 +107,7 @@ function animate(x) {
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 	let gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
-	gradient.addColorStop(0.1, '#02ace4')
+	gradient.addColorStop(0.1, '#0fb0e5')
 	gradient.addColorStop(1, '#cfecfc')
 
 	ctx.fillStyle = gradient
