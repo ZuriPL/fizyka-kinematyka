@@ -146,26 +146,57 @@ function animate(x) {
 
 	let ballRadius = 15 + +massInput.value * 3
 
+	// ctx.beginPath()
+	// ctx.moveTo(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100)
+	// ctx.lineTo(
+	// 	canvas.width / 3 - ballRadius + 1,
+	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
+	// )
+	// ctx.moveTo(
+	// 	canvas.width / 3 - ballRadius,
+	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
+	// )
+	// ctx.lineTo(
+	// 	canvas.width / 3 + ballRadius + 1,
+	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
+	// )
+	// ctx.moveTo(
+	// 	canvas.width / 3 + ballRadius,
+	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
+	// )
+	// ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
+	// ctx.stroke()
+
+	let b = Math.sqrt(5625 + Math.pow(+heightInput.value * 100 - y * 100 - ballRadius - 1, 2))
+	let c = Math.sqrt(Math.pow(b, 2) - Math.pow(ballRadius + 1, 2))
+
+	let ang1 = Math.asin(((+heightInput.value - y) * 100 - ballRadius - 1) / b)
+	let ang2 = Math.asin((ballRadius + 1) / b)
+
+	let alpha = Math.PI * 0.5 - ang1 - ang2
+
+	let o1 = c * Math.cos(alpha)
+	let o2 = c * Math.sin(alpha)
+
 	ctx.beginPath()
 	ctx.moveTo(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100)
-	ctx.lineTo(
-		canvas.width / 3 - ballRadius + 1,
-		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	)
-	ctx.moveTo(
-		canvas.width / 3 - ballRadius,
-		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	)
-	ctx.lineTo(
-		canvas.width / 3 + ballRadius + 1,
-		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	)
-	ctx.moveTo(
-		canvas.width / 3 + ballRadius,
-		Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	)
-	ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
+	if (+heightInput.value > y) {
+		ctx.lineTo(canvas.width / 3 - 75 + o2, canvas.height - heightInput.value * 100 + o1 + 1)
+		ctx.moveTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
+		ctx.lineTo(canvas.width / 3 + 75 - o2, canvas.height - heightInput.value * 100 + o1 + 1)
+
+		let a1 = Math.asin((o1 - (+heightInput.value * 100 - (y * 100 + ballRadius))) / (ballRadius + 1))
+		let a2 = Math.acos((o1 - (+heightInput.value * 100 - (y * 100 + ballRadius))) / (ballRadius + 1))
+
+		console.log(a1)
+
+		ctx.arc(canvas.width / 3, canvas.height - y * 100 - ballRadius, ballRadius + 1, a1, a1 + 2 * a2)
+	} else {
+		ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
+	}
 	ctx.stroke()
+
+	// ===
 
 	ctx.beginPath()
 	ctx.arc(canvas.width / 3, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
