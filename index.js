@@ -180,6 +180,7 @@ function animate(x) {
 
 	ctx.beginPath()
 	ctx.moveTo(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100)
+
 	if (+heightInput.value > y) {
 		ctx.lineTo(canvas.width / 3 - 75 + o2, canvas.height - heightInput.value * 100 + o1 + 1)
 		ctx.moveTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
@@ -188,12 +189,11 @@ function animate(x) {
 		let a1 = Math.asin((o1 - (+heightInput.value * 100 - (y * 100 + ballRadius))) / (ballRadius + 1))
 		let a2 = Math.acos((o1 - (+heightInput.value * 100 - (y * 100 + ballRadius))) / (ballRadius + 1))
 
-		console.log(a1)
-
 		ctx.arc(canvas.width / 3, canvas.height - y * 100 - ballRadius, ballRadius + 1, a1, a1 + 2 * a2)
 	} else {
 		ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
 	}
+
 	ctx.stroke()
 
 	// ===
