@@ -5,6 +5,7 @@ const controls = document.querySelector('fieldset')
 const vText = document.querySelector('#vel-label > span')
 const aText = document.querySelector('#a-label > span')
 const gridInput = document.querySelector('#grid-check')
+const dampingInput = document.querySelector('#damping')
 
 const timeText = document.querySelector('#time-label > span')
 const timeMultiplierInput = document.querySelector('#time-input')
@@ -72,7 +73,7 @@ function stopSim() {
 	startButton.textContent = 'Start'
 }
 
-function clear(x) {
+function clear() {
 	stopSim()
 
 	controls.removeAttribute('disabled', '')
@@ -99,10 +100,29 @@ let isRunning = false
 function move(dt) {
 	v += a * dt
 	y -= v * dt
+
+	document.querySelector('#y').textContent = y
+}
+
+function sgn(x) {
+	if (x > 0) {
+		return 1
+	}
+	if (x < 0) {
+		return -1
+	}
+	return 0
 }
 
 function animate(x) {
-	a = +gravityInput.value - (+trampKInput.value * Math.max(0, +heightInput.value - y)) / +massInput.value
+	let trampVel = 0
+
+	if (dampingInput.checked) trampVel = +heightInput.value - y > 0 ? v : 0
+
+	a =
+		+gravityInput.value -
+		(+trampKInput.value * Math.max(0, +heightInput.value - y)) / +massInput.value -
+		(2 * Math.sqrt(+trampKInput.value * +massInput.value) * trampVel * sgn(trampVel)) / +massInput.value
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -145,27 +165,6 @@ function animate(x) {
 	ctx.strokeStyle = '#000000'
 
 	let ballRadius = 15 + +massInput.value * 3
-
-	// ctx.beginPath()
-	// ctx.moveTo(canvas.width / 3 - 75, canvas.height - +heightInput.value * 100)
-	// ctx.lineTo(
-	// 	canvas.width / 3 - ballRadius + 1,
-	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	// )
-	// ctx.moveTo(
-	// 	canvas.width / 3 - ballRadius,
-	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	// )
-	// ctx.lineTo(
-	// 	canvas.width / 3 + ballRadius + 1,
-	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	// )
-	// ctx.moveTo(
-	// 	canvas.width / 3 + ballRadius,
-	// 	Math.max(canvas.height - +heightInput.value * 100, canvas.height - y * 100)
-	// )
-	// ctx.lineTo(canvas.width / 3 + 75, canvas.height - +heightInput.value * 100)
-	// ctx.stroke()
 
 	let b = Math.sqrt(5625 + Math.pow(+heightInput.value * 100 - y * 100 - ballRadius - 1, 2))
 	let c = Math.sqrt(Math.pow(b, 2) - Math.pow(ballRadius + 1, 2))
