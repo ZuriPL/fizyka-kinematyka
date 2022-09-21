@@ -100,8 +100,6 @@ let isRunning = false
 function move(dt) {
 	v += a * dt
 	y -= v * dt
-
-	document.querySelector('#y').textContent = y
 }
 
 function sgn(x) {
@@ -216,8 +214,9 @@ function animate(x) {
 		console.log('Dotknięto podłogi')
 	}
 
-	vText.textContent = v + ' m/s'
-	aText.textContent = a + ' m/s^2'
+	vText.textContent = v.toFixed(2) + ' m/s'
+	aText.textContent = a.toFixed(2) + ' m/s^2'
+	document.querySelector('#y-text > span').textContent = y.toFixed(2) + ' m'
 
 	window.requestAnimationFrame(animate)
 }
