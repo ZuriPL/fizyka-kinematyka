@@ -48,6 +48,14 @@ massInput.addEventListener('input', () => {
 })
 massText.textContent = Number.parseFloat(massInput.value).toFixed(3) + ' kg'
 
+const dampingInput = document.querySelector('#damping-input')
+const dampingText = document.querySelector('#damping-input > span')
+
+dampingInput.addEventListener('input', () => {
+	dampingText.textContent = Number.parseFloat(dampingInput.value).toFixed(1)
+})
+dampingText.textContent = Number.parseFloat(dampingInput.value).toFixed(1)
+
 const trampKText = document.querySelector('#tramp-k-label > span')
 const trampKInput = document.querySelector('#tramp-k-input')
 
