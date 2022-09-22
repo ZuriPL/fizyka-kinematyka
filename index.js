@@ -5,7 +5,6 @@ const controls = document.querySelector('fieldset')
 const vText = document.querySelector('#vel-label > span')
 const aText = document.querySelector('#a-label > span')
 const gridInput = document.querySelector('#grid-check')
-const dampingInput = document.querySelector('#damping')
 
 const timeText = document.querySelector('#time-label > span')
 const timeMultiplierInput = document.querySelector('#time-input')
@@ -48,8 +47,8 @@ massInput.addEventListener('input', () => {
 })
 massText.textContent = Number.parseFloat(massInput.value).toFixed(3) + ' kg'
 
-const dampingInput = document.querySelector('#damping-input')
-const dampingText = document.querySelector('#damping-input > span')
+const dampingInput = document.querySelector('#damping-label > input')
+const dampingText = document.querySelector('#damping-label > span')
 
 dampingInput.addEventListener('input', () => {
 	dampingText.textContent = Number.parseFloat(dampingInput.value).toFixed(1)
@@ -110,25 +109,14 @@ function move(dt) {
 	y -= v * dt
 }
 
-function sgn(x) {
-	if (x > 0) {
-		return 1
-	}
-	if (x < 0) {
-		return -1
-	}
-	return 0
-}
-
 function animate(x) {
-	let trampVel = 0
-
-	if (dampingInput.checked) trampVel = +heightInput.value - y > 0 ? v : 0
+	let trampVel = +heightInput.value - y > 0 ? v : 0
 
 	a =
 		+gravityInput.value -
 		(+trampKInput.value * Math.max(0, +heightInput.value - y)) / +massInput.value -
-		(2 * Math.sqrt(+trampKInput.value * +massInput.value) * trampVel * sgn(trampVel)) / +massInput.value
+		Math.abs(+dampingInput.value * 2 * Math.sqrt(+trampKInput.value * +massInput.value) * trampVel) /
+			+massInput.value
 
 	ctx.clearRect(0, 0, canvas.width, canvas.height)
 
