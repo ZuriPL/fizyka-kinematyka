@@ -6,7 +6,7 @@ const vText = document.querySelector('#vel-label > span')
 const aText = document.querySelector('#a-label > span')
 const gridInput = document.querySelector('#grid-check')
 
-const timeText = document.querySelector('#time-label > span')
+const timeText = document.querySelector('#time-label > span.text')
 const timeMultiplierInput = document.querySelector('#time-input')
 
 timeMultiplierInput.addEventListener('input', () => {
@@ -14,7 +14,7 @@ timeMultiplierInput.addEventListener('input', () => {
 })
 timeText.textContent = Number.parseFloat(+timeMultiplierInput.value).toFixed(1)
 
-const heightText = document.querySelector('#height-label > span')
+const heightText = document.querySelector('#height-label > span.text')
 const heightInput = document.querySelector('#height-input')
 
 heightInput.addEventListener('input', () => {
@@ -22,15 +22,15 @@ heightInput.addEventListener('input', () => {
 })
 heightText.textContent = Number.parseFloat(+heightInput.value).toFixed(2) + ' m'
 
-const gravityText = document.querySelector('#gravity-label > span')
+const gravityText = document.querySelector('#gravity-label > span.text')
 const gravityInput = document.querySelector('#gravity-input')
 
 gravityInput.addEventListener('input', () => {
-	gravityText.textContent = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s^2'
+	gravityText.innerHTML = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s&#178;'
 })
-gravityText.textContent = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s^2'
+gravityText.innerHTML = Number.parseFloat(+gravityInput.value).toFixed(2) + ' m/s&#178;'
 
-const ballText = document.querySelector('#ball-label > span')
+const ballText = document.querySelector('#ball-label > span.text')
 const ballInput = document.querySelector('#ball-input')
 
 ballInput.addEventListener('input', () => {
@@ -39,7 +39,7 @@ ballInput.addEventListener('input', () => {
 })
 ballText.textContent = Number.parseFloat(ballInput.value).toFixed(2) + ' m'
 
-const massText = document.querySelector('#mass-label > span')
+const massText = document.querySelector('#mass-label > span.text')
 const massInput = document.querySelector('#mass-input')
 
 massInput.addEventListener('input', () => {
@@ -48,14 +48,14 @@ massInput.addEventListener('input', () => {
 massText.textContent = Number.parseFloat(massInput.value).toFixed(3) + ' kg'
 
 const dampingInput = document.querySelector('#damping-label > input')
-const dampingText = document.querySelector('#damping-label > span')
+const dampingText = document.querySelector('#damping-label > span.text')
 
 dampingInput.addEventListener('input', () => {
 	dampingText.textContent = Number.parseFloat(dampingInput.value).toFixed(1)
 })
 dampingText.textContent = Number.parseFloat(dampingInput.value).toFixed(1)
 
-const trampKText = document.querySelector('#tramp-k-label > span')
+const trampKText = document.querySelector('#tramp-k-label > span.text')
 const trampKInput = document.querySelector('#tramp-k-input')
 
 trampKInput.addEventListener('input', () => {
@@ -189,8 +189,6 @@ function animate(x) {
 
 	ctx.stroke()
 
-	// ===
-
 	ctx.beginPath()
 	ctx.arc(canvas.width / 3, canvas.height - y * 100 - ballRadius, ballRadius, Math.PI * 2, 0, false)
 	ctx.closePath()
@@ -211,7 +209,7 @@ function animate(x) {
 	}
 
 	vText.textContent = v.toFixed(2) + ' m/s'
-	aText.textContent = a.toFixed(2) + ' m/s^2'
+	aText.innerHTML = a.toFixed(2) + ' m/s&#178;'
 	document.querySelector('#y-text > span').textContent = y.toFixed(2) + ' m'
 
 	window.requestAnimationFrame(animate)
